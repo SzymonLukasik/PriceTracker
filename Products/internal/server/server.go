@@ -35,13 +35,15 @@ func (s *ProductsServer) AddNewPrice(ctx context.Context, newP *pb.ProductNewPri
 	if err != nil {
 		log.WithError(err).Error("unable to add new price")
 	}
-	return nil, err
+	return new(emptypb.Empty), err
 }
 
 func (s *ProductsServer) AddNewProduct(ctx context.Context, p *pb.Product) (*emptypb.Empty, error) {
 	_, err := s.psql.AddNewProduct(ctx, p)
 	if err != nil {
 		log.WithError(err).Error("unable to add new produt")
+		return nil, err
 	}
-	return nil, err
+	log.Info("new product added")
+	return new(emptypb.Empty), nil
 }

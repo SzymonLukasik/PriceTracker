@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"database/sql"
+	"time"
 
 	pb "pricetracker/pkg/build/pkg/proto"
 
@@ -32,7 +33,7 @@ func Start(connStrings []string) Postgres {
 
 func (p *Postgres) GetProductPrices(ctx context.Context, pr *pb.Product) (*pb.ProductPrices, error) {
 	rows, err := p.db[getShopShard(pr.Shop)].
-		Query("SELECT update_ts, price FROM Products WHERE shop = $1 AND model = $2 ORDER BY update_ts", pr.Shop, pr.Name)
+		Query(`SELECT update_ts, price FROM Products WHERE shop = $1 AND model = $2 ORDER BY update_ts`, pr.Shop, pr.Name)
 	if err != nil {
 		log.WithError(err).WithFields(log.Fields{
 			"shop":    pr.Shop,
@@ -56,7 +57,7 @@ func (p *Postgres) GetProductPrices(ctx context.Context, pr *pb.Product) (*pb.Pr
 }
 
 func (p *Postgres) AddNewPrice(ctx context.Context, newP *pb.ProductNewPrice) (*emptypb.Empty, error) {
-	_, err := p.db[getShopShard(newP.Product.Shop)].ExecContext(ctx, "INSERT INTO Products VALUES ($1, $2, $3, $4, $5)",
+	_, err := p.db[getShopShard(newP.Product.Shop)].ExecContext(ctx, `INSERT INTO Products VALUES ($1, $2, $3, $4, $5)`,
 		newP.Product.Shop, newP.Product.Name, newP.Product.Url, newP.Price.Ts, newP.Price.Price)
 	if err != nil {
 		log.WithError(err).WithFields(log.Fields{
@@ -72,8 +73,8 @@ func (p *Postgres) AddNewPrice(ctx context.Context, newP *pb.ProductNewPrice) (*
 }
 
 func (p *Postgres) AddNewProduct(ctx context.Context, pr *pb.Product) (*emptypb.Empty, error) {
-	_, err := p.db[getShopShard(pr.Shop)].ExecContext(ctx, "INSERT INTO Products VALUES ($1, $2, $3)",
-		pr.Shop, pr.Name, pr.Url)
+	_, err := p.db[getShopShard(pr.Shop)].ExecContext(ctx, `INSERT INTO Products VALUES ($1, $2, $3, $4, $5)`,
+		pr.Shop, pr.Name, pr.Url, time.Now(), 0)
 	if err != nil {
 		log.WithError(err).WithFields(log.Fields{
 			"product": *pr,
@@ -83,7 +84,7 @@ func (p *Postgres) AddNewProduct(ctx context.Context, pr *pb.Product) (*emptypb.
 	log.WithFields(log.Fields{
 		"product": *pr,
 	}).Info("new product inserted")
-	return &emptypb.Empty{}, nil
+	return new(emptypb.Empty), nil
 }
 
 func getShopShard(shop string) int {

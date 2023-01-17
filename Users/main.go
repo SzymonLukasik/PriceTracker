@@ -20,7 +20,7 @@ func main() {
 
 	log.Info("creating a new grpc server for Users service")
 	s := grpc.NewServer()
-	server := sv.Start(UsersDB)
+	server := sv.Start(UsersDB, Products)
 	pb.RegisterUsersServer(s, server)
 	log.Info(fmt.Sprintf("server registered, listening on port: %d", port))
 
@@ -30,4 +30,5 @@ func main() {
 }
 
 const port = 8081
-const UsersDB = "localhost:5432"
+const UsersDB = "host=localhost port=5432 user=postgres password=$SECRET dbname=postgres sslmode=disable"
+const Products = "localhost:8083"
