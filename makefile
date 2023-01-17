@@ -1,3 +1,8 @@
+.PHONY: build-proto
+
+build-proto:
+	protoc --go_out=pkg/build/ --go-grpc_out=pkg/build/ pkg/proto/*.proto
+
 testrun:
 	go run test.go
 

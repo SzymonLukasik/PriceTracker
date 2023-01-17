@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option go_package="./pkg/proto";
+
+service Users {
+    rpc GetProducts(User) returns (ProductList);
+    rpc AddProduct(UserProduct) returns (ProductList);
+};
+
+message Product {
+    string shop = 1;
+    string name = 2;
+    string url = 3;
+    int32 id = 4;
+};
+
+message ProductList {
+    repeated Product productsList = 1; 
+}
+
+message User {
+    string name = 1;
+}
+
+message UserProduct {
+    User user = 1;
+    Product product = 2;
+}
