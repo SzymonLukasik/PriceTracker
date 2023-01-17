@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net"
 
-	sv "pricetracker/Users/internal/server"
+	sv "pricetracker/Products/internal/server"
 	pb "pricetracker/pkg/build/pkg/proto"
 
 	"google.golang.org/grpc"
@@ -12,16 +12,17 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// FIXME JUST A LAYOUT
 func main() {
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
-		log.WithError(err).Fatal("unable to start Users listener")
+		log.WithError(err).Fatal("unable to start Products listener")
 	}
 
-	log.Info("creating a new grpc server for Users service")
+	log.Info("creating a new grpc server for Products service")
 	s := grpc.NewServer()
-	server := sv.Start(UsersDB)
-	pb.RegisterUsersServer(s, server)
+	server := sv.Start(ProductsDBs)
+	pb.RegisterProductsServer(s, server)
 	log.Info(fmt.Sprintf("server registered, listening on port: %d", port))
 
 	if err := s.Serve(listener); err != nil {
@@ -30,4 +31,5 @@ func main() {
 }
 
 const port = 8081
-const UsersDB = "localhost:5432"
+
+var ProductsDBs = []string{"0.0.0.0:5432", "0.0.0.0:5432"}

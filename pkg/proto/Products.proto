@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option go_package="./pkg/proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+service Products {
+    rpc GetProductPrices(Product) returns (ProductPrices);
+    rpc AddNewPrice(ProductNewPrice) returns (google.protobuf.Empty);
+    rpc AddNewProduct(Product) returns (google.protobuf.Empty);
+};
+
+message Product {
+    string shop = 1;
+    string name = 2;
+    string url = 3;
+    int32 id = 4;
+};
+
+message DatePrice {
+    google.protobuf.Timestamp ts = 1;
+    int32 price = 2;
+}
+
+message ProductNewPrice {
+    Product product = 1;
+    DatePrice price = 2;
+}
+
+message ProductPrices {
+    repeated DatePrice prices = 1;
+}
+
+message ProductList {
+    repeated Product productsList = 1; 
+}
