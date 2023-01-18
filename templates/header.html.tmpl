@@ -1,0 +1,16 @@
+{{ define "header.html.tmpl" }}
+<header>
+	<nav class="d-flex">
+		<h1 class="mr-auto p-2">PriceTracker</h1>
+
+		{{if .sessionUsername}}
+			<p class="p-2"> {{.sessionUsername}} </p>
+			<a class="p-2" href="/products">Your products</a>
+			<a class="p-2" href="/track">Track prices</a>
+			<a class="p-2" href="/logout">Log out</a>
+		{{else}}
+			<a class="p-2" href="/login">Log in</a>
+		{{end}}
+	</nav>
+</header>
+{{ end }}

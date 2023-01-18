@@ -33,6 +33,6 @@ func main() {
 const port = 8083
 
 var ProductsDBs = []string{
-	"host=localhost port=5432 user=postgres password=$SECRET dbname=postgres sslmode=disable",
-	"host=localhost port=5432 user=postgres password=$SECRET dbname=postgres sslmode=disable",
+	"host=localhost port=5432 user=postgres password=pswd dbname=postgres sslmode=disable",
+	"host=localhost port=5432 user=postgres password=pswd dbname=postgres sslmode=disable",
 }

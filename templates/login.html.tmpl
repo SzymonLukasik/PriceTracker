@@ -1,0 +1,26 @@
+{{ define "login.html.tmpl" }}
+
+<!doctype html>
+<html lang="en">
+
+	{{ template "head.html.tmpl" .}}
+	
+	<body class="d-flex flex-column min-vh-100">
+		{{ template "header.html.tmpl" .}}
+			<div>
+				<p>
+					Log in
+				</p>
+                <form action="/login" method="post">
+                    <label for="username"> 
+                        Enter your name
+                    </label>
+                    <input type="text" name="username" id="username">
+                    <input type="submit" value="OK">
+                </form>
+			</div>
+		{{ template "footer.html.tmpl" .}}
+	</body>
+</html>
+
+{{ end }}

@@ -26,7 +26,7 @@ func Start(connString string) Postgres {
 }
 
 func (p *Postgres) GetProducts(user *pb.User) (*pb.ProductList, error) {
-	rows, err := p.db.Query(`SELECT shop, model FROM Users WHERE username=$1`, user.Name)
+	rows, err := p.db.Query(`SELECT shop, model, url FROM Users WHERE username=$1`, user.Name)
 	if err != nil {
 		log.WithError(err).WithField("user", user).Error("unable to retrieve products")
 		return nil, err
@@ -36,7 +36,7 @@ func (p *Postgres) GetProducts(user *pb.User) (*pb.ProductList, error) {
 	result := pb.ProductList{}
 	for rows.Next() {
 		var product pb.Product
-		if err = rows.Scan(&product.Shop, &product.Name); err != nil {
+		if err = rows.Scan(&product.Shop, &product.Name, &product.Url); err != nil {
 			log.WithError(err).Error("unable to scan product")
 			return nil, err
 		}
@@ -51,8 +51,8 @@ func (p *Postgres) GetProducts(user *pb.User) (*pb.ProductList, error) {
 
 func (p *Postgres) AddProduct(ctx context.Context, up *pb.UserProduct) error {
 	f := func() error {
-		_, err := p.db.ExecContext(ctx, `INSERT INTO Users VALUES ($1, $2, $3)`,
-			up.User.Name, up.Product.Shop, up.Product.Name)
+		_, err := p.db.ExecContext(ctx, `INSERT INTO Users VALUES ($1, $2, $3, $4)`,
+			up.User.Name, up.Product.Shop, up.Product.Name, up.Product.Url)
 		if err != nil {
 			log.WithError(err).Error("unable to add new product")
 			return err

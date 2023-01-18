@@ -30,5 +30,5 @@ func main() {
 }
 
 const port = 8081
-const UsersDB = "host=localhost port=5432 user=postgres password=$SECRET dbname=postgres sslmode=disable"
+const UsersDB = "host=localhost port=5432 user=postgres password=pswd dbname=postgres sslmode=disable"
 const Products = "localhost:8083"
