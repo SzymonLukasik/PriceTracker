@@ -1,0 +1,22 @@
+{{ define "index.html.tmpl" }}
+
+<!doctype html>
+<html lang="en">
+
+	{{ template "head.html.tmpl" .}}
+	
+	<body class="d-flex flex-column min-vh-100">
+		{{ template "header.html.tmpl" .}}
+			<div>
+				<p>
+					Price tracker allows you to track prices of your products over time.
+				</p>
+				<p>
+					Log in to get started.
+				</p>
+			</div>
+		{{ template "footer.html.tmpl" .}}
+	</body>
+</html>
+
+{{ end }}

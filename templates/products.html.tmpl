@@ -1,0 +1,68 @@
+{{ define "products.html.tmpl" }}
+
+<!doctype html>
+<html lang="en">
+
+	{{ template "head.html.tmpl" .}}
+	
+	<body class="d-flex flex-column min-vh-100">
+		{{ template "header.html.tmpl" .}}
+			<div>
+				<p>
+					Add products to track!
+				</p>
+				<form action="/addProduct" method="post">
+                    <label for="shop"> 
+                        Enter shop
+                    </label>
+                    <input type="text" name="shop" id="shop">
+					<label for="name"> 
+                        Enter product name
+                    </label>
+                    <input type="text" name="name" id="name">
+					<label for="url"> 
+                        Enter link to your product
+                    </label>
+                    <input type="url" name="url" id="url">
+                    <input type="submit" value="OK">
+                </form>
+				
+				Your products:
+				<table>
+					<tr>
+						<td>
+							Index
+						</td>
+						<td>
+							Product name
+						</td>
+						<td>
+							Shop
+						</td>
+						<td>
+							URL
+						</td>
+					</tr>
+					{{range $idx, $product := .products}}
+						<tr>
+							<td>
+								{{ $idx }}
+							</td>
+							<td>
+								{{ $product.Shop }}
+							</td>
+							<td>
+								{{ $product.Name }}
+							</td>
+							<td>
+								{{ $product.Url }}
+							</td>
+						</tr>
+					{{end}}
+				</table>
+			</div>
+		{{ template "footer.html.tmpl" .}}
+	</body>
+</html>
+
+{{ end }}
