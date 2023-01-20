@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option go_package="./pkg/proto";
 
-import "pkg/proto/Products.proto";
+import "Products.proto";
 
 service Users {
     rpc GetProducts(User) returns (ProductList);

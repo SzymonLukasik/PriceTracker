@@ -5,6 +5,7 @@ go 1.19
 require github.com/sirupsen/logrus v1.9.0
 
 require (
+	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/gin-contrib/sessions v0.0.5 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/gin-gonic/gin v1.8.2 // indirect
@@ -32,7 +33,10 @@ require (
 )
 
 require (
+	github.com/PuerkitoBio/goquery v1.8.0
+	github.com/anaskhan96/soup v1.2.5
 	github.com/golang-migrate/migrate v3.5.4+incompatible // indirect
+	github.com/jasonlvhit/gocron v0.0.1
 	github.com/lib/pq v1.10.7
 	golang.org/x/sys v0.3.0 // indirect
 	google.golang.org/grpc v1.52.0

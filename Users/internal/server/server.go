@@ -6,9 +6,9 @@ import (
 	psql "pricetracker/Users/internal/db"
 	pb "pricetracker/pkg/build/pkg/proto"
 
+	prod "pricetracker/pkg/products"
+
 	log "github.com/sirupsen/logrus"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 type UserServer struct {
@@ -24,7 +24,7 @@ func Start(connString string, prodAddrPort string) pb.UsersServer {
 	p := psql.Start(connString)
 	return &UserServer{
 		psql: p,
-		prod: newProducts(prodAddrPort),
+		prod: prod.NewProductsClient(prodAddrPort),
 	}
 }
 
@@ -55,13 +55,4 @@ func (s *UserServer) AddProduct(ctx context.Context, up *pb.UserProduct) (*pb.Pr
 	}
 	log.WithField("user-product", *up).Info("successfully added a product to user's pool")
 	return list, nil
-}
-
-func newProducts(addrPort string) pb.ProductsClient {
-	log.WithField("products addrport", addrPort).Info("connecting to products")
-	conn, err := grpc.Dial(addrPort, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		log.WithError(err).Fatal("unable to connect to products")
-	}
-	return pb.NewProductsClient(conn)
 }

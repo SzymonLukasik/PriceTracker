@@ -47,3 +47,13 @@ func (s *ProductsServer) AddNewProduct(ctx context.Context, p *pb.Product) (*emp
 	log.Info("new product added")
 	return new(emptypb.Empty), nil
 }
+
+func (s *ProductsServer) GetAllProducts(ctx context.Context, e *emptypb.Empty) (*pb.ProductList, error) {
+	result, err := s.psql.GetAllProducts(ctx)
+	if err != nil {
+		log.WithError(err).Error("unable to get all products")
+		return nil, err
+	}
+	log.Info("all products retrieved successfully")
+	return result, nil
+}

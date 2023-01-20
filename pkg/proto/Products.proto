@@ -8,6 +8,7 @@ service Products {
     rpc GetProductPrices(Product) returns (ProductPrices);
     rpc AddNewPrice(ProductNewPrice) returns (google.protobuf.Empty);
     rpc AddNewProduct(Product) returns (google.protobuf.Empty);
+    rpc GetAllProducts(google.protobuf.Empty) returns (ProductList);
 };
 
 message Product {

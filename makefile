@@ -1,7 +1,10 @@
 .PHONY: build-proto
 
 build-proto:
-	protoc --go_out=pkg/build/ --go-grpc_out=pkg/build/ pkg/proto/*.proto
+	protoc --proto_path=pkg/proto --go_out=pkg/build/ --go-grpc_out=pkg/build/ pkg/proto/*.proto
+
+build-proto-python:
+	python -m grpc_tools.protoc --proto_path=pkg/proto --python_out=src --grpc_python_out=src pkg/proto/*.proto
 
 run-app:
 	go run app.go
