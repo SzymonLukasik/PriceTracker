@@ -87,6 +87,31 @@ func (p *Postgres) AddNewProduct(ctx context.Context, pr *pb.Product) (*emptypb.
 	return new(emptypb.Empty), nil
 }
 
+func (p *Postgres) GetAllProducts(ctx context.Context) (*pb.ProductList, error) {
+	result := pb.ProductList{}
+	for d := range p.db {
+		rows, err := p.db[d].Query(`SELECT shop, name, url FROM products GROUP BY shop, name, url ORDER BY 1, 2, 3`)
+		if err != nil {
+			log.WithError(err).Error("unable to retrieve all products")
+			return nil, err
+		}
+		defer rows.Close()
+
+		res := pb.ProductList{}
+		for rows.Next() {
+			product := pb.Product{}
+			if err = rows.Scan(&product.Shop, &product.Name, &product.Url); err != nil {
+				log.WithError(err).Error("unable to scan some fields while retrieving all products")
+				return nil, err
+			}
+			res.ProductsList = append(res.ProductsList, &product)
+		}
+		result.ProductsList = append(result.ProductsList, res.ProductsList...)
+	}
+	log.WithField("products retrieved", len(result.ProductsList)).Info("retrieved all products")
+	return &result, nil
+}
+
 func getShopShard(shop string) int {
 	if shop[0] < 'm' {
 		return 1
