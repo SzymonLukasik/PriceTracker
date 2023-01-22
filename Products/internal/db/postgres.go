@@ -58,7 +58,7 @@ func (p *Postgres) GetProductPrices(ctx context.Context, pr *pb.Product) (*pb.Pr
 
 func (p *Postgres) AddNewPrice(ctx context.Context, newP *pb.ProductNewPrice) (*emptypb.Empty, error) {
 	_, err := p.db[getShopShard(newP.Product.Shop)].ExecContext(ctx, `INSERT INTO Products VALUES ($1, $2, $3, $4, $5)`,
-		newP.Product.Shop, newP.Product.Name, newP.Product.Url, newP.Price.Ts, newP.Price.Price)
+		newP.Product.Shop, newP.Product.Name, newP.Product.Url, newP.Price.Ts.AsTime(), newP.Price.Price)
 	if err != nil {
 		log.WithError(err).WithFields(log.Fields{
 			"product": *newP.Product,
@@ -113,7 +113,7 @@ func (p *Postgres) GetAllProducts(ctx context.Context) (*pb.ProductList, error) 
 }
 
 func getShopShard(shop string) int {
-	if shop[0] < 'm' {
+	if shop[0] >= 'M' {
 		return 1
 	}
 	return 0
