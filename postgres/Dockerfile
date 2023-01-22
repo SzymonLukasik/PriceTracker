@@ -1,0 +1,5 @@
+FROM postgres:latest
+EXPOSE 5432
+ENV POSTGRES_PASSWORD pswd
+ENV POSTGRES_DB postgres
+ENV POSTGRES_USER postgres

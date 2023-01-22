@@ -6,6 +6,9 @@ build-proto:
 build-proto-python:
 	python -m grpc_tools.protoc --proto_path=pkg/proto --python_out=src --grpc_python_out=src pkg/proto/*.proto
 
+build-proto-python:
+	python -m grpc_tools.protoc --proto_path=pkg/proto/*.proto --python_out=pkg/build --grpc_python_out=pkg/build
+
 run-app:
 	go run app.go
 

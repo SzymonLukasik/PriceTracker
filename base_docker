@@ -1,0 +1,7 @@
+#FROM golang:1.19-bullseye
+#WORKDIR /app
+#COPY go.mod go.sum ./
+#ADD pkg ./pkg
+#ADD assets ./assets
+#ADD templates ./templates
+#RUN go mod download
