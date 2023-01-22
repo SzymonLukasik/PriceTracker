@@ -1,4 +1,5 @@
 from datetime import datetime
+import time
 
 import selenium.common.exceptions
 from google import protobuf
@@ -12,6 +13,10 @@ import Products_pb2_grpc as pygrpc
 import Products_pb2 as pb
 import schedule
 import grpc
+from apscheduler.schedulers.background import BlockingScheduler
+from apscheduler.triggers.interval import IntervalTrigger
+
+INTERVAL = 1
 
 DRIVER_PATH = "./chromedriver.exe"
 options = Options()
@@ -78,8 +83,12 @@ def scrape_euro(addr):
     return price
 
 
+scheduler = BlockingScheduler()
+
+
+@scheduler.scheduled_job(IntervalTrigger(hours=INTERVAL))
 def scrape():
-    channel = grpc.insecure_channel('localhost:8083')
+    channel = grpc.insecure_channel('10.104.130.162:8083')
     stub = pygrpc.ProductsStub(channel)
     prods = stub.GetAllProducts(protobuf.empty_pb2.Empty())
     if prods is None:
@@ -105,5 +114,6 @@ def scrape():
 
 
 if __name__ == '__main__':
-    schedule.every(1).minutes.do(scrape)
-    schedule.run_all()
+    scrape()
+    scheduler.start()
+
