@@ -90,7 +90,7 @@ func (p *Postgres) AddNewProduct(ctx context.Context, pr *pb.Product) (*emptypb.
 func (p *Postgres) GetAllProducts(ctx context.Context) (*pb.ProductList, error) {
 	result := pb.ProductList{}
 	for d := range p.db {
-		rows, err := p.db[d].Query(`SELECT shop, name, url FROM products GROUP BY shop, name, url ORDER BY 1, 2, 3`)
+		rows, err := p.db[d].Query(`SELECT shop, model, url FROM products GROUP BY shop, model, url ORDER BY 1, 2, 3`)
 		if err != nil {
 			log.WithError(err).Error("unable to retrieve all products")
 			return nil, err
