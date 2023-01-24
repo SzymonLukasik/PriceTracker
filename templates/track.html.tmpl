@@ -6,14 +6,33 @@
 	{{ template "head.html.tmpl" .}}
 	
 	<body class="d-flex flex-column min-vh-100">
+		<script>
+			function LinkFormatter(value, row, index) {
+				return "<a href='"+row.url+"'>"+value+"</a>";
+			}
+		</script>
 		{{ template "header.html.tmpl" .}}
-			<div>
-				<p>
-					Price tracker allows you to track prices of your products over time.
-				</p>
-				<p>
-					Log in to get started.
-				</p>
+			<div class="d-flex flex-row justify-content-start">
+				<div class="col-3 d-flex flex-column">	
+					<h4>
+						Choose product to track!
+					</h4>
+					<form action="/chooseProduct" method="post" class="d-flex flex-column">
+							{{range $idx, $product := .products}}
+								<div class="form-check">
+									<input type="radio" id={{$idx}} name="idx" value="{{$idx}}" class="form-check-input">
+									<label for={{$idx}} class="form-check-label">{{$product.Name}} - {{$product.Shop}}</label>
+								</div>
+							{{end}}
+							<input type="submit" value="OK">
+					</form>
+				</div>
+				
+				<div class="col-8 d-flex flex-column">
+					{{if .sessionUsername}}
+						{{ .chart }}
+					{{end}}
+				</div>
 			</div>
 		{{ template "footer.html.tmpl" .}}
 	</body>

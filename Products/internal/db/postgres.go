@@ -10,6 +10,7 @@ import (
 	_ "github.com/lib/pq"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/types/known/emptypb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type Postgres struct {
@@ -33,7 +34,7 @@ func Start(connStrings []string) Postgres {
 
 func (p *Postgres) GetProductPrices(ctx context.Context, pr *pb.Product) (*pb.ProductPrices, error) {
 	rows, err := p.db[getShopShard(pr.Shop)].
-		Query(`SELECT update_ts, price FROM Products WHERE shop = $1 AND model = $2 ORDER BY update_ts`, pr.Shop, pr.Name)
+		Query(`SELECT update_ts, price FROM Products WHERE shop = $1 AND model = $2 AND url = $3 ORDER BY update_ts`, pr.Shop, pr.Name, pr.Url)
 	if err != nil {
 		log.WithError(err).WithFields(log.Fields{
 			"shop":    pr.Shop,
@@ -45,11 +46,13 @@ func (p *Postgres) GetProductPrices(ctx context.Context, pr *pb.Product) (*pb.Pr
 
 	result := pb.ProductPrices{}
 	for rows.Next() {
+		var time time.Time
 		var price pb.DatePrice
-		if err = rows.Scan(&price.Ts, &price.Price); err != nil {
+		if err = rows.Scan(&time, &price.Price); err != nil {
 			log.WithError(err).Error("unable to scan price")
 			return nil, err
 		}
+		price.Ts = timestamppb.New(time)
 		result.Prices = append(result.Prices, &price)
 	}
 	log.WithField("product", *pr).Info("successfully scanned product's prices")
