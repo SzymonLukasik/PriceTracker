@@ -1,0 +1,5 @@
+FROM go-base:1.0.0
+COPY diagram_generator.go ./
+RUN go build -o diag ./diagram_generator.go
+EXPOSE 8085
+ENTRYPOINT [ "./diag" ]

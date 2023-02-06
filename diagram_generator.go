@@ -77,7 +77,7 @@ func httpserver(w http.ResponseWriter, r *http.Request) {
 		// FIXME add retry policy
 	}
 	defer sdconn.Close()
-
+	log.Info("new connection")
 	products := pb.NewProductsClient(sdconn)
 
 	q := r.URL.Query()
@@ -86,7 +86,7 @@ func httpserver(w http.ResponseWriter, r *http.Request) {
 		Name: q.Get("name"),
 		Url:  q.Get("url"),
 	}
-
+	log.WithField("products", product).Info("product request")
 	// product := pb.Product{
 	// 	Shop: "Euro",
 	// 	Name: "laptop1",
@@ -96,6 +96,7 @@ func httpserver(w http.ResponseWriter, r *http.Request) {
 	list, err := products.GetProductPrices(context.Background(), &product)
 
 	if err == nil {
+		log.Info("get product prices successful")
 		// create a new line instance
 		line := charts.NewLine()
 		line.Renderer = newSnippetRenderer(line, line.Validate)
@@ -143,7 +144,7 @@ func httpserver(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/product", httpserver)
-	http.ListenAndServe("localhost:8085", nil)
+	http.ListenAndServe(":8085", nil)
 }
 
-const products = "localhost:8083"
+const products = "10.104.130.162:8083"
