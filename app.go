@@ -147,6 +147,7 @@ func main() {
 					defer resp.Body.Close()
 					body, err := io.ReadAll(resp.Body)
 					if err == nil {
+						log.WithField("header", resp.Header).Info("Received response from diagram generator")
 						bodyStr := string(body[:])
 						c.HTML(http.StatusOK, "track.html.tmpl", gin.H{
 							"sessionUsername": session.Get("username").(string),
