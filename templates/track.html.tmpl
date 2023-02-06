@@ -14,18 +14,24 @@
 		{{ template "header.html.tmpl" .}}
 			<div class="d-flex flex-row justify-content-start">
 				<div class="col-3 d-flex flex-column">	
-					<h4>
-						Choose product to track!
-					</h4>
-					<form action="/chooseProduct" method="post" class="d-flex flex-column">
-							{{range $idx, $product := .products}}
-								<div class="form-check">
-									<input type="radio" id={{$idx}} name="idx" value="{{$idx}}" class="form-check-input">
-									<label for={{$idx}} class="form-check-label">{{$product.Name}} - {{$product.Shop}}</label>
-								</div>
-							{{end}}
-							<input type="submit" value="OK">
-					</form>
+					{{if .products}}
+						<h4>
+							Choose product to track!
+						</h4>
+						<form action="/chooseProduct" method="post" class="d-flex flex-column">
+								{{range $idx, $product := .products}}
+									<div class="form-check">
+										<input type="radio" id={{$idx}} name="idx" value="{{$idx}}" class="form-check-input">
+										<label for={{$idx}} class="form-check-label">{{$product.Name}} - {{$product.Shop}}</label>
+									</div>
+								{{end}}
+								<input type="submit" value="OK">
+						</form>
+					{{else}}
+						<h4>
+							Add products first!
+						</h4>
+					{{end}}
 				</div>
 				
 				<div class="col-8 d-flex flex-column">
