@@ -101,7 +101,7 @@ def scrape_euro(addr):
 scheduler = BlockingScheduler()
 
 
-@scheduler.scheduled_job(IntervalTrigger(hours=INTERVAL))
+@scheduler.scheduled_job(IntervalTrigger(minutes=15))
 def scrape():
     print("beginning to scrape")
     # channel = grpc.insecure_channel('localhost:8083')

@@ -195,9 +195,9 @@ func main() {
 		c.Redirect(http.StatusTemporaryRedirect, "/")
 	})
 
-	r.Run("localhost:8080")
+	r.Run(":8080")
 }
 
-const users = "localhost:8081"
+const users = "10.104.130.163:8081"
 
-const diagramGenerator = "http://localhost:8085/product"
+const diagramGenerator = "http://10.104.130.165:8085/product"
