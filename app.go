@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"io"
 	"net/http"
+	"net/url"
 
 	pb "pricetracker/pkg/build/pkg/proto"
 
@@ -140,7 +141,7 @@ func main() {
 				product := list.GetProductsList()[chooseProductForm.Idx]
 				log.WithField("product", product).WithField("idx", chooseProductForm.Idx).Info("choosed product")
 
-				resp, err := http.Get(fmt.Sprintf("%s?shop=%s&name=%s&url=%s", diagramGenerator, product.Shop, product.Name, product.Url))
+				resp, err := http.Get(fmt.Sprintf("%s?shop=%s&name=%s&url=%s", diagramGenerator, url.QueryEscape(product.Shop), url.QueryEscape(product.Name), url.QueryEscape(product.Url)))
 
 				if err == nil {
 					defer resp.Body.Close()
